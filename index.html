@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>URL 복사</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background: #f0f2f5;
+      font-family: 'Segoe UI', sans-serif;
+    }
+    .box {
+      background: #fff;
+      border-radius: 12px;
+      padding: 40px 48px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    .label {
+      font-size: 13px;
+      color: #888;
+      margin-bottom: 16px;
+    }
+    .url {
+      font-size: 18px;
+      font-weight: 600;
+      color: #1a1a1a;
+      background: #f5f7fa;
+      border: 1.5px solid #d0d7e2;
+      border-radius: 8px;
+      padding: 14px 24px;
+      cursor: pointer;
+      user-select: all;
+      word-break: break-all;
+      transition: border-color 0.2s;
+    }
+    .url:hover { border-color: #4a90e2; }
+    .btn {
+      margin-top: 20px;
+      padding: 12px 36px;
+      background: #4a90e2;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn:hover { background: #357abd; }
+    .toast {
+      margin-top: 16px;
+      font-size: 13px;
+      color: #27ae60;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .toast.show { opacity: 1; }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <div class="label">아래 URL을 클릭하거나 버튼으로 복사하세요</div>
+    <div class="url" id="url" onclick="copyUrl()">https://devmedam.urbanlt.co.kr/admin/login</div>
+    <button class="btn" onclick="copyUrl()">📋 복사하기</button>
+    <div class="toast" id="toast">✅ 복사되었습니다!</div>
+  </div>
+  <script>
+    function copyUrl() {
+      navigator.clipboard.writeText('https://devmedam.urbanlt.co.kr/admin/login');
+      const t = document.getElementById('toast');
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2000);
+    }
+  </script>
+</body>
+</html>
