@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>URL 복사</title>
+  <title>로그인 도우미</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -19,38 +19,98 @@
       padding: 40px 48px;
       box-shadow: 0 4px 20px rgba(0,0,0,0.1);
       text-align: center;
+      min-width: 360px;
     }
-    .label {
-      font-size: 13px;
-      color: #888;
-      margin-bottom: 16px;
-    }
-    .url {
+    .label { font-size: 13px; color: #888; margin-bottom: 24px; }
+    .row { margin-bottom: 16px; }
+    .row-title { font-size: 12px; color: #aaa; margin-bottom: 6px; text-align: left; }
+    .link {
       display: block;
-      font-size: 18px;
+      font-size: 14px;
       font-weight: 600;
       color: #4a90e2;
       background: #f5f7fa;
       border: 1.5px solid #d0d7e2;
       border-radius: 8px;
-      padding: 14px 24px;
-      cursor: pointer;
-      word-break: break-all;
+      padding: 12px 16px;
       text-decoration: none;
+      word-break: break-all;
+      text-align: left;
       transition: border-color 0.2s, background 0.2s;
     }
-    .url:hover {
-      border-color: #4a90e2;
-      background: #eaf2ff;
+    .link:hover { border-color: #4a90e2; background: #eaf2ff; }
+    .pw-wrap {
+      display: flex;
+      align-items: center;
+      background: #f5f7fa;
+      border: 1.5px solid #d0d7e2;
+      border-radius: 8px;
+      overflow: hidden;
+      transition: border-color 0.2s;
     }
+    .pw-wrap:hover { border-color: #4a90e2; }
+    .pw-text {
+      flex: 1;
+      padding: 12px 16px;
+      font-size: 15px;
+      font-weight: 600;
+      color: #1a1a1a;
+      text-align: left;
+      user-select: all;
+      cursor: text;
+    }
+    .copy-btn {
+      padding: 12px 16px;
+      background: #4a90e2;
+      color: #fff;
+      border: none;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+      white-space: nowrap;
+    }
+    .copy-btn:hover { background: #357abd; }
+    .toast {
+      margin-top: 14px;
+      font-size: 13px;
+      color: #27ae60;
+      opacity: 0;
+      transition: opacity 0.3s;
+      min-height: 18px;
+    }
+    .toast.show { opacity: 1; }
   </style>
 </head>
 <body>
   <div class="box">
-    <div class="label">클릭하면 바로 접속됩니다</div>
-    <a class="url" href="https://devmedam.urbanlt.co.kr/admin/login" target="_blank">
-      https://devmedam.urbanlt.co.kr/admin/login
-    </a>
+    <div class="label">로그인 페이지 접속 후 비밀번호 복사하세요</div>
+
+    <div class="row">
+      <div class="row-title">🌐 URL (클릭하면 접속)</div>
+      <a class="link" href="https://devmedam.urbanlt.co.kr/admin/login" target="_blank">
+        https://devmedam.urbanlt.co.kr/admin/login
+      </a>
+    </div>
+
+    <div class="row">
+      <div class="row-title">🔑 비밀번호</div>
+      <div class="pw-wrap">
+        <div class="pw-text">eodid12!@</div>
+        <button class="copy-btn" onclick="copyPw()">📋 복사</button>
+      </div>
+    </div>
+
+    <div class="toast" id="toast">✅ 비밀번호가 복사되었습니다!</div>
   </div>
+
+  <script>
+    function copyPw() {
+      navigator.clipboard.writeText('eodid12!@');
+      const t = document.getElementById('toast');
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2000);
+    }
+  </script>
 </body>
 </html>
