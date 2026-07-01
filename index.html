@@ -93,10 +93,62 @@
       min-height: 18px;
     }
     .toast.show { opacity: 1; }
+
+    /* 게이트 화면 */
+    #gate {
+      background: #fff;
+      border-radius: 12px;
+      padding: 40px 48px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      text-align: center;
+      min-width: 360px;
+    }
+    #gate .label { margin-bottom: 20px; }
+    #gate input {
+      width: 100%;
+      padding: 12px 16px;
+      font-size: 16px;
+      letter-spacing: 4px;
+      text-align: center;
+      border: 1.5px solid #d0d7e2;
+      border-radius: 8px;
+      margin-bottom: 14px;
+      outline: none;
+    }
+    #gate input:focus { border-color: #4a90e2; }
+    #gate button {
+      width: 100%;
+      padding: 12px 16px;
+      background: #4a90e2;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    #gate button:hover { background: #357abd; }
+    #gate .err {
+      margin-top: 10px;
+      font-size: 13px;
+      color: #e74c3c;
+      min-height: 16px;
+    }
+    #content { display: none; }
   </style>
 </head>
-<body>
-  <div class="box">
+<body oncontextmenu="return false" onselectstart="return false">
+
+  <!-- 비밀번호 게이트 -->
+  <div id="gate">
+    <div class="label">🔒 접근 비밀번호를 입력하세요</div>
+    <input type="password" id="gatePw" maxlength="10" inputmode="numeric" autocomplete="off" placeholder="••••">
+    <button onclick="checkGate()">확인</button>
+    <div class="err" id="gateErr"></div>
+  </div>
+
+  <!-- 실제 콘텐츠 -->
+  <div class="box" id="content">
     <div class="label">로그인 페이지 접속 후 비밀번호 복사하세요</div>
     <div class="row">
       <div class="row-title">🌐 URL (클릭하면 접속)</div>
@@ -119,13 +171,42 @@
     </div>
     <div class="toast" id="toast">✅ 비밀번호가 복사되었습니다!</div>
   </div>
+
   <script>
+    const GATE_PW = '2514';
+    let attempts = 0;
+
+    function checkGate() {
+      const input = document.getElementById('gatePw').value;
+      const err = document.getElementById('gateErr');
+      if (input === GATE_PW) {
+        document.getElementById('gate').style.display = 'none';
+        document.getElementById('content').style.display = 'block';
+      } else {
+        attempts++;
+        err.textContent = '비밀번호가 올바르지 않습니다.';
+        document.getElementById('gatePw').value = '';
+        document.getElementById('gatePw').focus();
+      }
+    }
+
+    document.getElementById('gatePw').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') checkGate();
+    });
+
     function copyPw() {
       navigator.clipboard.writeText('eodid12!@');
       const t = document.getElementById('toast');
       t.classList.add('show');
       setTimeout(() => t.classList.remove('show'), 2000);
     }
+
+    // 개발자 도구 단축키 방해 (완전 차단은 불가능함)
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'F12') e.preventDefault();
+      if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) e.preventDefault();
+      if (e.ctrlKey && e.key === 'u') e.preventDefault();
+    });
   </script>
 </body>
 </html>
