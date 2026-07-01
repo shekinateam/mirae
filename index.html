@@ -1,212 +1,206 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-  <meta charset="UTF-8">
-  <title>로그인 도우미</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      background: #f0f2f5;
-      font-family: 'Segoe UI', sans-serif;
-    }
-    .box {
-      background: #fff;
-      border-radius: 12px;
-      padding: 40px 48px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-      text-align: center;
-      min-width: 360px;
-    }
-    .label { font-size: 13px; color: #888; margin-bottom: 24px; }
-    .row { margin-bottom: 16px; }
-    .row-title { font-size: 12px; color: #aaa; margin-bottom: 6px; text-align: left; }
-    .link {
-      display: block;
-      font-size: 14px;
-      font-weight: 600;
-      color: #4a90e2;
-      background: #f5f7fa;
-      border: 1.5px solid #d0d7e2;
-      border-radius: 8px;
-      padding: 12px 16px;
-      text-decoration: none;
-      word-break: break-all;
-      text-align: left;
-      transition: border-color 0.2s, background 0.2s;
-    }
-    .link:hover { border-color: #4a90e2; background: #eaf2ff; }
-    .pw-wrap {
-      display: flex;
-      align-items: center;
-      background: #f5f7fa;
-      border: 1.5px solid #d0d7e2;
-      border-radius: 8px;
-      overflow: hidden;
-      transition: border-color 0.2s;
-    }
-    .pw-wrap:hover { border-color: #4a90e2; }
-    .pw-text {
-      flex: 1;
-      padding: 12px 16px;
-      font-size: 15px;
-      font-weight: 600;
-      color: #1a1a1a;
-      text-align: left;
-      user-select: all;
-      cursor: text;
-    }
-    .copy-btn {
-      padding: 12px 16px;
-      background: #4a90e2;
-      color: #fff;
-      border: none;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.2s;
-      white-space: nowrap;
-    }
-    .copy-btn:hover { background: #357abd; }
-    .dl-btn {
-      display: block;
-      padding: 12px 16px;
-      background: #27ae60;
-      color: #fff;
-      border-radius: 8px;
-      font-size: 14px;
-      font-weight: 600;
-      text-decoration: none;
-      text-align: center;
-      transition: background 0.2s;
-    }
-    .dl-btn:hover { background: #1e8449; }
-    .toast {
-      margin-top: 14px;
-      font-size: 13px;
-      color: #27ae60;
-      opacity: 0;
-      transition: opacity 0.3s;
-      min-height: 18px;
-    }
-    .toast.show { opacity: 1; }
-
-    /* 게이트 화면 */
-    #gate {
-      background: #fff;
-      border-radius: 12px;
-      padding: 40px 48px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-      text-align: center;
-      min-width: 360px;
-    }
-    #gate .label { margin-bottom: 20px; }
-    #gate input {
-      width: 100%;
-      padding: 12px 16px;
-      font-size: 16px;
-      letter-spacing: 4px;
-      text-align: center;
-      border: 1.5px solid #d0d7e2;
-      border-radius: 8px;
-      margin-bottom: 14px;
-      outline: none;
-    }
-    #gate input:focus { border-color: #4a90e2; }
-    #gate button {
-      width: 100%;
-      padding: 12px 16px;
-      background: #4a90e2;
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-    #gate button:hover { background: #357abd; }
-    #gate .err {
-      margin-top: 10px;
-      font-size: 13px;
-      color: #e74c3c;
-      min-height: 16px;
-    }
-    #content { display: none; }
-  </style>
-</head>
-<body oncontextmenu="return false" onselectstart="return false">
-
-  <!-- 비밀번호 게이트 -->
-  <div id="gate">
-    <div class="label">🔒 접근 비밀번호를 입력하세요</div>
-    <input type="password" id="gatePw" maxlength="10" inputmode="numeric" autocomplete="off" placeholder="••••">
-    <button onclick="checkGate()">확인</button>
-    <div class="err" id="gateErr"></div>
-  </div>
-
-  <!-- 실제 콘텐츠 -->
-  <div class="box" id="content">
-    <div class="label">로그인 페이지 접속 후 비밀번호 복사하세요</div>
-    <div class="row">
-      <div class="row-title">🌐 URL (클릭하면 접속)</div>
-      <a class="link" href="https://devmedam.urbanlt.co.kr/admin/login" target="_blank">
-        https://devmedam.urbanlt.co.kr/admin/login
-      </a>
-    </div>
-    <div class="row">
-      <div class="row-title">🔑 비밀번호</div>
-      <div class="pw-wrap">
-        <div class="pw-text">eodid12!@</div>
-        <button class="copy-btn" onclick="copyPw()">📋 복사</button>
-      </div>
-    </div>
-    <div class="row">
-      <div class="row-title">📱 앱 다운로드 (v1.1.0)</div>
-      <a class="dl-btn" href="https://raw.githubusercontent.com/shekinateam/mirae/main/mirae-app-release-v1.1.0.apk" download="mirae-app-release-v1.1.0.apk">
-        ⬇️ APK 다운로드
-      </a>
-    </div>
-    <div class="toast" id="toast">✅ 비밀번호가 복사되었습니다!</div>
-  </div>
-
-  <script>
-    const GATE_PW = '2514';
-    let attempts = 0;
-
-    function checkGate() {
-      const input = document.getElementById('gatePw').value;
-      const err = document.getElementById('gateErr');
-      if (input === GATE_PW) {
-        document.getElementById('gate').style.display = 'none';
-        document.getElementById('content').style.display = 'block';
-      } else {
-        attempts++;
-        err.textContent = '비밀번호가 올바르지 않습니다.';
-        document.getElementById('gatePw').value = '';
-        document.getElementById('gatePw').focus();
+        ui.password.disabled = isBusy;
+        ui.openButton.textContent = isBusy ? "확인 중..." : "열기";
       }
-    }
 
-    document.getElementById('gatePw').addEventListener('keydown', function(e) {
-      if (e.key === 'Enter') checkGate();
-    });
+      function wait(ms) {
+        return new Promise((resolve) => window.setTimeout(resolve, ms));
+      }
 
-    function copyPw() {
-      navigator.clipboard.writeText('eodid12!@');
-      const t = document.getElementById('toast');
-      t.classList.add('show');
-      setTimeout(() => t.classList.remove('show'), 2000);
-    }
+      async function decryptVault(password) {
+        const rawKey = await crypto.subtle.importKey(
+          "raw",
+          encoder.encode(password),
+          "PBKDF2",
+          false,
+          ["deriveKey"]
+        );
 
-    // 개발자 도구 단축키 방해 (완전 차단은 불가능함)
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'F12') e.preventDefault();
-      if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) e.preventDefault();
-      if (e.ctrlKey && e.key === 'u') e.preventDefault();
-    });
+        const key = await crypto.subtle.deriveKey(
+          {
+            name: "PBKDF2",
+            salt: bytesFromBase64(vault.salt),
+            iterations: vault.iterations,
+            hash: "SHA-256"
+          },
+          rawKey,
+          { name: "AES-GCM", length: 256 },
+          false,
+          ["decrypt"]
+        );
+
+        const plain = await crypto.subtle.decrypt(
+          { name: "AES-GCM", iv: bytesFromBase64(vault.iv) },
+          key,
+          bytesFromBase64(vault.data)
+        );
+
+        return Object.freeze(JSON.parse(decoder.decode(plain)));
+      }
+
+      function renderUnlocked(data) {
+        ui.loginLink.href = data.loginUrl;
+        ui.loginLink.textContent = data.loginUrl;
+        ui.downloadLink.href = data.downloadUrl;
+        ui.downloadLink.download = data.downloadName;
+        ui.downloadLink.textContent = `APK 다운로드 (${data.version})`;
+        ui.passwordText.textContent = maskedPassword;
+        ui.revealButton.textContent = "보기";
+        ui.gate.hidden = true;
+        ui.app.hidden = false;
+      }
+
+      async function unlock() {
+        const password = ui.password.value;
+        if (!password) {
+          setMessage("비밀번호를 입력하세요.");
+          ui.password.focus();
+          return;
+        }
+
+        if (!window.crypto || !crypto.subtle) {
+          setMessage("이 브라우저에서는 보안 기능을 사용할 수 없습니다.");
+          return;
+        }
+
+        setBusy(true);
+        setMessage("확인 중입니다.", true);
+
+        try {
+          if (failedAttempts > 0) {
+            await wait(Math.min(10000, failedAttempts * failedAttempts * 700));
+          }
+          const data = await decryptVault(password);
+          protectedData = data;
+          failedAttempts = 0;
+          isRevealed = false;
+          ui.password.value = "";
+          setMessage("");
+          renderUnlocked(data);
+        } catch (error) {
+          failedAttempts += 1;
+          ui.password.value = "";
+          setMessage("비밀번호를 확인해주세요.");
+          ui.password.focus();
+        } finally {
+          setBusy(false);
+        }
+      }
+
+      function lock(message = "") {
+        protectedData = null;
+        isRevealed = false;
+        window.clearTimeout(revealTimer);
+        ui.passwordText.textContent = maskedPassword;
+        ui.loginLink.removeAttribute("href");
+        ui.loginLink.textContent = "";
+        ui.downloadLink.removeAttribute("href");
+        ui.downloadLink.removeAttribute("download");
+        ui.downloadLink.textContent = "APK 다운로드";
+        ui.app.hidden = true;
+        ui.gate.hidden = false;
+        setMessage(message);
+        ui.password.focus();
+      }
+
+      function showToast(text) {
+        ui.toast.textContent = text;
+        ui.toast.classList.add("show");
+        window.clearTimeout(toastTimer);
+        toastTimer = window.setTimeout(() => ui.toast.classList.remove("show"), 1800);
+      }
+
+      function copyWithFallback(text) {
+        const helper = document.createElement("textarea");
+        helper.value = text;
+        helper.setAttribute("readonly", "");
+        helper.style.position = "fixed";
+        helper.style.left = "-9999px";
+        helper.style.top = "0";
+        document.body.appendChild(helper);
+        helper.select();
+        document.execCommand("copy");
+        helper.remove();
+      }
+
+      async function copyPassword() {
+        if (!protectedData) return;
+
+        try {
+          if (navigator.clipboard && window.isSecureContext) {
+            await navigator.clipboard.writeText(protectedData.adminPassword);
+          } else {
+            copyWithFallback(protectedData.adminPassword);
+          }
+          showToast("복사되었습니다.");
+        } catch (error) {
+          showToast("복사할 수 없습니다.");
+        }
+      }
+
+      function toggleReveal() {
+        if (!protectedData) return;
+
+        isRevealed = !isRevealed;
+        ui.passwordText.textContent = isRevealed ? protectedData.adminPassword : maskedPassword;
+        ui.revealButton.textContent = isRevealed ? "숨기기" : "보기";
+        window.clearTimeout(revealTimer);
+
+        if (isRevealed) {
+          revealTimer = window.setTimeout(() => {
+            isRevealed = false;
+            ui.passwordText.textContent = maskedPassword;
+            ui.revealButton.textContent = "보기";
+          }, 12000);
+        }
+      }
+
+      function openLogin() {
+        if (!protectedData) return;
+        window.open(protectedData.loginUrl, "_blank", "noopener,noreferrer");
+      }
+
+      function blockInspectionShortcuts(event) {
+        const key = event.key.toLowerCase();
+        const blocked =
+          key === "f12" ||
+          (event.ctrlKey && key === "u") ||
+          (event.ctrlKey && event.shiftKey && ["i", "j", "c"].includes(key)) ||
+          (event.metaKey && event.altKey && ["i", "j", "c"].includes(key));
+
+        if (blocked) {
+          event.preventDefault();
+          event.stopPropagation();
+          if (protectedData) {
+            lock("잠금 화면에서 다시 진행하세요.");
+          } else {
+            setMessage("잠금 화면에서 다시 진행하세요.", true);
+          }
+          return false;
+        }
+
+        return true;
+      }
+
+      ui.openButton.addEventListener("click", unlock);
+      ui.password.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") unlock();
+      });
+      ui.lockButton.addEventListener("click", () => lock());
+      ui.copyButton.addEventListener("click", copyPassword);
+      ui.revealButton.addEventListener("click", toggleReveal);
+      ui.loginOpenButton.addEventListener("click", openLogin);
+
+      document.addEventListener("contextmenu", (event) => event.preventDefault());
+      document.addEventListener("keydown", blockInspectionShortcuts, true);
+      document.addEventListener("visibilitychange", () => {
+        window.clearTimeout(hiddenLockTimer);
+        if (document.hidden && protectedData) {
+          hiddenLockTimer = window.setTimeout(() => lock(), 90000);
+        }
+      });
+
+      window.addEventListener("pageshow", () => ui.password.focus());
+    })();
   </script>
 </body>
 </html>
