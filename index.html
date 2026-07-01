@@ -1,3 +1,403 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>로그인 도우미</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html,
+    body {
+      min-height: 100%;
+    }
+
+    body {
+      display: grid;
+      place-items: center;
+      min-height: 100dvh;
+      padding: 24px;
+      background:
+        linear-gradient(135deg, rgba(46, 91, 186, 0.10), transparent 42%),
+        linear-gradient(315deg, rgba(39, 174, 96, 0.10), transparent 40%),
+        #f4f6f8;
+      color: #16202a;
+      font-family: "Segoe UI", "Apple SD Gothic Neo", "Malgun Gothic", Arial, sans-serif;
+      letter-spacing: 0;
+    }
+
+    .panel {
+      width: min(100%, 440px);
+      border: 1px solid #d8e0ea;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.96);
+      box-shadow: 0 18px 50px rgba(23, 37, 55, 0.14);
+      overflow: hidden;
+    }
+
+    .panel-head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 22px 24px 18px;
+      border-bottom: 1px solid #e6ebf1;
+      background: #fbfcfd;
+    }
+
+    .mark {
+      display: grid;
+      place-items: center;
+      flex: 0 0 38px;
+      width: 38px;
+      height: 38px;
+      border-radius: 8px;
+      background: #204e8a;
+      color: #fff;
+      font-size: 19px;
+      font-weight: 800;
+    }
+
+    h1 {
+      font-size: 19px;
+      line-height: 1.25;
+      font-weight: 750;
+    }
+
+    .sub {
+      margin-top: 4px;
+      color: #607084;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .body {
+      padding: 24px;
+    }
+
+    .field {
+      display: grid;
+      gap: 8px;
+    }
+
+    label,
+    .row-label {
+      color: #536274;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    input {
+      width: 100%;
+      min-height: 46px;
+      padding: 12px 14px;
+      border: 1.5px solid #c9d3df;
+      border-radius: 8px;
+      background: #fff;
+      color: #15202b;
+      font-size: 16px;
+      letter-spacing: 0;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: #204e8a;
+      box-shadow: 0 0 0 3px rgba(32, 78, 138, 0.15);
+    }
+
+    .button-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    button,
+    .link-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 0 14px;
+      border: 0;
+      border-radius: 8px;
+      background: #204e8a;
+      color: #fff;
+      font: inherit;
+      font-size: 14px;
+      font-weight: 750;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background 0.18s ease, transform 0.18s ease;
+    }
+
+    button:hover,
+    .link-button:hover {
+      background: #173c6f;
+    }
+
+    button:active,
+    .link-button:active {
+      transform: translateY(1px);
+    }
+
+    button:disabled {
+      background: #91a1b3;
+      cursor: wait;
+      transform: none;
+    }
+
+    .secondary {
+      background: #eef2f6;
+      color: #243547;
+    }
+
+    .secondary:hover {
+      background: #dde5ee;
+    }
+
+    .success {
+      background: #238552;
+    }
+
+    .success:hover {
+      background: #1c7045;
+    }
+
+    .message {
+      min-height: 20px;
+      margin-top: 12px;
+      color: #c2352a;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .message.muted {
+      color: #607084;
+    }
+
+    .rows {
+      display: grid;
+      gap: 18px;
+    }
+
+    .row {
+      display: grid;
+      gap: 8px;
+    }
+
+    .value-line {
+      display: flex;
+      align-items: stretch;
+      min-height: 46px;
+      border: 1.5px solid #c9d3df;
+      border-radius: 8px;
+      background: #f8fafc;
+      overflow: hidden;
+    }
+
+    .value {
+      display: flex;
+      align-items: center;
+      flex: 1;
+      min-width: 0;
+      padding: 0 14px;
+      color: #15202b;
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 1.35;
+      overflow-wrap: anywhere;
+    }
+
+    .value-line button {
+      flex: 0 0 auto;
+      min-height: 44px;
+      border-radius: 0;
+    }
+
+    .plain-link {
+      color: #204e8a;
+      text-decoration: none;
+    }
+
+    .plain-link:hover {
+      text-decoration: underline;
+    }
+
+    .top-actions {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 16px;
+    }
+
+    .toast {
+      min-height: 20px;
+      margin-top: 14px;
+      color: #238552;
+      font-size: 13px;
+      font-weight: 700;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    .toast.show {
+      opacity: 1;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    @media (max-width: 520px) {
+      body {
+        padding: 16px;
+      }
+
+      .panel-head,
+      .body {
+        padding-left: 18px;
+        padding-right: 18px;
+      }
+
+      .button-row {
+        flex-direction: column;
+      }
+
+      button,
+      .link-button {
+        width: 100%;
+      }
+
+      .value-line {
+        display: grid;
+      }
+
+      .value-line button {
+        border-top: 1px solid #d8e0ea;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="panel" aria-live="polite">
+    <section id="gate">
+      <div class="panel-head">
+        <div class="mark" aria-hidden="true">L</div>
+        <div>
+          <h1>로그인 도우미</h1>
+          <p class="sub">보호된 로그인 정보를 열려면 비밀번호를 입력하세요.</p>
+        </div>
+      </div>
+      <div class="body">
+        <div class="field">
+          <label for="gatePassword">비밀번호</label>
+          <input id="gatePassword" type="password" inputmode="numeric" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="비밀번호 입력">
+        </div>
+        <div class="button-row">
+          <button id="openButton" type="button">열기</button>
+        </div>
+        <p class="message" id="message"></p>
+      </div>
+    </section>
+
+    <section id="app" hidden>
+      <div class="panel-head">
+        <div class="mark" aria-hidden="true">L</div>
+        <div>
+          <h1>로그인 정보</h1>
+          <p class="sub">필요한 항목만 열람하고 사용 후 잠그세요.</p>
+        </div>
+      </div>
+      <div class="body">
+        <div class="top-actions">
+          <button class="secondary" id="lockButton" type="button">잠금</button>
+        </div>
+        <div class="rows">
+          <div class="row">
+            <div class="row-label">관리자 페이지</div>
+            <div class="value-line">
+              <a class="value plain-link" id="loginLink" target="_blank" rel="noopener noreferrer"></a>
+              <button id="loginOpenButton" type="button">열기</button>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="row-label">관리자 비밀번호</div>
+            <div class="value-line">
+              <div class="value" id="passwordText">*********</div>
+              <button class="secondary" id="revealButton" type="button">보기</button>
+              <button id="copyButton" type="button">복사</button>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="row-label">앱 다운로드</div>
+            <a class="link-button success" id="downloadLink" rel="noopener noreferrer">APK 다운로드</a>
+          </div>
+        </div>
+        <p class="toast" id="toast">복사되었습니다.</p>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const vault = Object.freeze({
+        iterations: 650000,
+        salt: "n/O3GlRShaQ/peN1aZU50g==",
+        iv: "8dVzeUYcTMYjVerL",
+        data: "AjJ80CdPFmVBehK3khdijKriNqU2dTtmOiICtygArBELsvcU6uRxW7u0WWgg8IGKqMMP9r2kLtl/W3qxn0JaT6mxc6N1lSoJbhArPD77kyIU7PQ1uCL5BU2R7tasQj9ruF2WIJFHtIbRkMKbOAPrTge7uALsr62XJVt2UzZk+p+SAUWNNuTslWeanJJ7hQy6MAUi+nIsgITluLzalwEHhnP08h/LZYkQOqVfrp+cp9X0sWjO/OcK7XxRKtpjpU7DGWATVIVzyLanII+gzY5z9AkSsBnI5IZ4OuMB9Tiju42J4A39X9WNXB1szYyVWDGSTlomDzY4J3eUy6HYrX0g1skCrk4x1fkjzfyesw=="
+      });
+
+      const $ = (id) => document.getElementById(id);
+      const ui = Object.freeze({
+        gate: $("gate"),
+        app: $("app"),
+        password: $("gatePassword"),
+        openButton: $("openButton"),
+        message: $("message"),
+        lockButton: $("lockButton"),
+        loginLink: $("loginLink"),
+        loginOpenButton: $("loginOpenButton"),
+        passwordText: $("passwordText"),
+        revealButton: $("revealButton"),
+        copyButton: $("copyButton"),
+        downloadLink: $("downloadLink"),
+        toast: $("toast")
+      });
+
+      const encoder = new TextEncoder();
+      const decoder = new TextDecoder();
+      const maskedPassword = "*********";
+      let protectedData = null;
+      let isRevealed = false;
+      let failedAttempts = 0;
+      let revealTimer = 0;
+      let toastTimer = 0;
+      let hiddenLockTimer = 0;
+
+      function bytesFromBase64(value) {
+        const raw = atob(value);
+        const bytes = new Uint8Array(raw.length);
+        for (let index = 0; index < raw.length; index += 1) {
+          bytes[index] = raw.charCodeAt(index);
+        }
+        return bytes;
+      }
+
+      function setMessage(text, muted = false) {
+        ui.message.textContent = text;
+        ui.message.classList.toggle("muted", muted);
+      }
+
+      function setBusy(isBusy) {
+        ui.openButton.disabled = isBusy;
         ui.password.disabled = isBusy;
         ui.openButton.textContent = isBusy ? "확인 중..." : "열기";
       }
