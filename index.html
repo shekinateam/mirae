@@ -2,605 +2,123 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="referrer" content="no-referrer">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
   <title>로그인 도우미</title>
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    html,
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      min-height: 100%;
-    }
-
-    body {
-      display: grid;
-      place-items: center;
-      min-height: 100dvh;
-      padding: 24px;
-      background:
-        linear-gradient(135deg, rgba(46, 91, 186, 0.10), transparent 42%),
-        linear-gradient(315deg, rgba(39, 174, 96, 0.10), transparent 40%),
-        #f4f6f8;
-      color: #16202a;
-      font-family: "Segoe UI", "Apple SD Gothic Neo", "Malgun Gothic", Arial, sans-serif;
-      letter-spacing: 0;
-    }
-
-    .panel {
-      width: min(100%, 440px);
-      border: 1px solid #d8e0ea;
-      border-radius: 8px;
-      background: rgba(255, 255, 255, 0.96);
-      box-shadow: 0 18px 50px rgba(23, 37, 55, 0.14);
-      overflow: hidden;
-    }
-
-    .panel-head {
       display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 22px 24px 18px;
-      border-bottom: 1px solid #e6ebf1;
-      background: #fbfcfd;
-    }
-
-    .mark {
-      display: grid;
-      place-items: center;
-      flex: 0 0 38px;
-      width: 38px;
-      height: 38px;
-      border-radius: 8px;
-      background: #204e8a;
-      color: #fff;
-      font-size: 19px;
-      font-weight: 800;
-    }
-
-    h1 {
-      font-size: 19px;
-      line-height: 1.25;
-      font-weight: 750;
-    }
-
-    .sub {
-      margin-top: 4px;
-      color: #607084;
-      font-size: 13px;
-      line-height: 1.45;
-    }
-
-    .body {
-      padding: 24px;
-    }
-
-    .field {
-      display: grid;
-      gap: 8px;
-    }
-
-    label,
-    .row-label {
-      color: #536274;
-      font-size: 13px;
-      font-weight: 700;
-    }
-
-    input {
-      width: 100%;
-      min-height: 46px;
-      padding: 12px 14px;
-      border: 1.5px solid #c9d3df;
-      border-radius: 8px;
-      background: #fff;
-      color: #15202b;
-      font-size: 16px;
-      letter-spacing: 0;
-      outline: none;
-    }
-
-    input:focus {
-      border-color: #204e8a;
-      box-shadow: 0 0 0 3px rgba(32, 78, 138, 0.15);
-    }
-
-    .button-row {
-      display: flex;
-      gap: 10px;
-      margin-top: 14px;
-    }
-
-    button,
-    .link-button {
-      display: inline-flex;
       align-items: center;
       justify-content: center;
-      min-height: 42px;
-      padding: 0 14px;
-      border: 0;
-      border-radius: 8px;
-      background: #204e8a;
-      color: #fff;
-      font: inherit;
+      min-height: 100vh;
+      background: #f0f2f5;
+      font-family: 'Segoe UI', sans-serif;
+    }
+    .box {
+      background: #fff;
+      border-radius: 12px;
+      padding: 40px 48px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      text-align: center;
+      min-width: 360px;
+    }
+    .label { font-size: 13px; color: #888; margin-bottom: 24px; }
+    .row { margin-bottom: 16px; }
+    .row-title { font-size: 12px; color: #aaa; margin-bottom: 6px; text-align: left; }
+    .link {
+      display: block;
       font-size: 14px;
-      font-weight: 750;
-      text-decoration: none;
-      cursor: pointer;
-      transition: background 0.18s ease, transform 0.18s ease;
-    }
-
-    button:hover,
-    .link-button:hover {
-      background: #173c6f;
-    }
-
-    button:active,
-    .link-button:active {
-      transform: translateY(1px);
-    }
-
-    button:disabled {
-      background: #91a1b3;
-      cursor: wait;
-      transform: none;
-    }
-
-    .secondary {
-      background: #eef2f6;
-      color: #243547;
-    }
-
-    .secondary:hover {
-      background: #dde5ee;
-    }
-
-    .success {
-      background: #238552;
-    }
-
-    .success:hover {
-      background: #1c7045;
-    }
-
-    .message {
-      min-height: 20px;
-      margin-top: 12px;
-      color: #c2352a;
-      font-size: 13px;
-      line-height: 1.5;
-    }
-
-    .message.muted {
-      color: #607084;
-    }
-
-    .rows {
-      display: grid;
-      gap: 18px;
-    }
-
-    .row {
-      display: grid;
-      gap: 8px;
-    }
-
-    .value-line {
-      display: flex;
-      align-items: stretch;
-      min-height: 46px;
-      border: 1.5px solid #c9d3df;
+      font-weight: 600;
+      color: #4a90e2;
+      background: #f5f7fa;
+      border: 1.5px solid #d0d7e2;
       border-radius: 8px;
-      background: #f8fafc;
-      overflow: hidden;
+      padding: 12px 16px;
+      text-decoration: none;
+      word-break: break-all;
+      text-align: left;
+      transition: border-color 0.2s, background 0.2s;
     }
-
-    .value {
+    .link:hover { border-color: #4a90e2; background: #eaf2ff; }
+    .copy-wrap {
       display: flex;
       align-items: center;
+      background: #f5f7fa;
+      border: 1.5px solid #d0d7e2;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .copy-wrap:hover { border-color: #4a90e2; }
+    .copy-text {
       flex: 1;
-      min-width: 0;
-      padding: 0 14px;
-      color: #15202b;
-      font-size: 14px;
-      font-weight: 700;
-      line-height: 1.35;
-      overflow-wrap: anywhere;
+      padding: 12px 16px;
+      font-size: 15px;
+      font-weight: 600;
+      color: #1a1a1a;
+      text-align: left;
+      user-select: all;
+      cursor: text;
     }
-
-    .value-line button {
-      flex: 0 0 auto;
-      min-height: 44px;
-      border-radius: 0;
-    }
-
-    .plain-link {
-      color: #204e8a;
-      text-decoration: none;
-    }
-
-    .plain-link:hover {
-      text-decoration: underline;
-    }
-
-    .top-actions {
-      display: flex;
-      justify-content: flex-end;
-      margin-bottom: 16px;
-    }
-
-    .toast {
-      min-height: 20px;
-      margin-top: 14px;
-      color: #238552;
+    .copy-btn {
+      padding: 12px 16px;
+      background: #4a90e2;
+      color: #fff;
+      border: none;
       font-size: 13px;
-      font-weight: 700;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+      white-space: nowrap;
+    }
+    .copy-btn:hover { background: #357abd; }
+    .toast {
+      margin-top: 14px;
+      font-size: 13px;
+      color: #27ae60;
       opacity: 0;
-      transition: opacity 0.2s ease;
+      transition: opacity 0.3s;
+      min-height: 18px;
     }
-
-    .toast.show {
-      opacity: 1;
-    }
-
-    [hidden] {
-      display: none !important;
-    }
-
-    @media (max-width: 520px) {
-      body {
-        padding: 16px;
-      }
-
-      .panel-head,
-      .body {
-        padding-left: 18px;
-        padding-right: 18px;
-      }
-
-      .button-row {
-        flex-direction: column;
-      }
-
-      button,
-      .link-button {
-        width: 100%;
-      }
-
-      .value-line {
-        display: grid;
-      }
-
-      .value-line button {
-        border-top: 1px solid #d8e0ea;
-      }
-    }
+    .toast.show { opacity: 1; }
   </style>
 </head>
 <body>
-  <main class="panel" aria-live="polite">
-    <section id="gate">
-      <div class="panel-head">
-        <div class="mark" aria-hidden="true">L</div>
-        <div>
-          <h1>로그인 도우미</h1>
-          <p class="sub">보호된 로그인 정보를 열려면 비밀번호를 입력하세요.</p>
-        </div>
-      </div>
-      <div class="body">
-        <div class="field">
-          <label for="gatePassword">비밀번호</label>
-          <input id="gatePassword" type="password" inputmode="numeric" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="비밀번호 입력">
-        </div>
-        <div class="button-row">
-          <button id="openButton" type="button">열기</button>
-        </div>
-        <p class="message" id="message"></p>
-      </div>
-    </section>
+  <div class="box">
+    <div class="label">아이디/비밀번호 복사 후 로그인하세요</div>
 
-    <section id="app" hidden>
-      <div class="panel-head">
-        <div class="mark" aria-hidden="true">L</div>
-        <div>
-          <h1>로그인 정보</h1>
-          <p class="sub">필요한 항목만 열람하고 사용 후 잠그세요.</p>
-        </div>
-      </div>
-      <div class="body">
-        <div class="top-actions">
-          <button class="secondary" id="lockButton" type="button">잠금</button>
-        </div>
-        <div class="rows">
-          <div class="row">
-            <div class="row-label">관리자 페이지</div>
-            <div class="value-line">
-              <a class="value plain-link" id="loginLink" target="_blank" rel="noopener noreferrer"></a>
-              <button id="loginOpenButton" type="button">열기</button>
-            </div>
-          </div>
+    <div class="row">
+      <div class="row-title">🌐 URL (클릭하면 접속)</div>
+      <a class="link" href="https://medam.dycis.co.kr/admin" target="_blank">
+        https://medam.dycis.co.kr/admin
+      </a>
+    </div>
 
-          <div class="row">
-            <div class="row-label">관리자 비밀번호</div>
-            <div class="value-line">
-              <div class="value" id="passwordText">*********</div>
-              <button class="secondary" id="revealButton" type="button">보기</button>
-              <button id="copyButton" type="button">복사</button>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="row-label">앱 다운로드</div>
-            <a class="link-button success" id="downloadLink" rel="noopener noreferrer">APK 다운로드</a>
-          </div>
-        </div>
-        <p class="toast" id="toast">복사되었습니다.</p>
+    <div class="row">
+      <div class="row-title">👤 아이디</div>
+      <div class="copy-wrap">
+        <div class="copy-text">display</div>
+        <button class="copy-btn" onclick="copyText('display', '아이디')">📋 복사</button>
       </div>
-    </section>
-  </main>
+    </div>
+
+    <div class="row">
+      <div class="row-title">🔑 비밀번호</div>
+      <div class="copy-wrap">
+        <div class="copy-text">qwer!@#$</div>
+        <button class="copy-btn" onclick="copyText('qwer!@#$', '비밀번호')">📋 복사</button>
+      </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+  </div>
 
   <script>
-    (() => {
-      "use strict";
-
-      const vault = Object.freeze({
-        iterations: 650000,
-        salt: "n/O3GlRShaQ/peN1aZU50g==",
-        iv: "8dVzeUYcTMYjVerL",
-        data: "AjJ80CdPFmVBehK3khdijKriNqU2dTtmOiICtygArBELsvcU6uRxW7u0WWgg8IGKqMMP9r2kLtl/W3qxn0JaT6mxc6N1lSoJbhArPD77kyIU7PQ1uCL5BU2R7tasQj9ruF2WIJFHtIbRkMKbOAPrTge7uALsr62XJVt2UzZk+p+SAUWNNuTslWeanJJ7hQy6MAUi+nIsgITluLzalwEHhnP08h/LZYkQOqVfrp+cp9X0sWjO/OcK7XxRKtpjpU7DGWATVIVzyLanII+gzY5z9AkSsBnI5IZ4OuMB9Tiju42J4A39X9WNXB1szYyVWDGSTlomDzY4J3eUy6HYrX0g1skCrk4x1fkjzfyesw=="
-      });
-
-      const $ = (id) => document.getElementById(id);
-      const ui = Object.freeze({
-        gate: $("gate"),
-        app: $("app"),
-        password: $("gatePassword"),
-        openButton: $("openButton"),
-        message: $("message"),
-        lockButton: $("lockButton"),
-        loginLink: $("loginLink"),
-        loginOpenButton: $("loginOpenButton"),
-        passwordText: $("passwordText"),
-        revealButton: $("revealButton"),
-        copyButton: $("copyButton"),
-        downloadLink: $("downloadLink"),
-        toast: $("toast")
-      });
-
-      const encoder = new TextEncoder();
-      const decoder = new TextDecoder();
-      const maskedPassword = "*********";
-      let protectedData = null;
-      let isRevealed = false;
-      let failedAttempts = 0;
-      let revealTimer = 0;
-      let toastTimer = 0;
-      let hiddenLockTimer = 0;
-
-      function bytesFromBase64(value) {
-        const raw = atob(value);
-        const bytes = new Uint8Array(raw.length);
-        for (let index = 0; index < raw.length; index += 1) {
-          bytes[index] = raw.charCodeAt(index);
-        }
-        return bytes;
-      }
-
-      function setMessage(text, muted = false) {
-        ui.message.textContent = text;
-        ui.message.classList.toggle("muted", muted);
-      }
-
-      function setBusy(isBusy) {
-        ui.openButton.disabled = isBusy;
-        ui.password.disabled = isBusy;
-        ui.openButton.textContent = isBusy ? "확인 중..." : "열기";
-      }
-
-      function wait(ms) {
-        return new Promise((resolve) => window.setTimeout(resolve, ms));
-      }
-
-      async function decryptVault(password) {
-        const rawKey = await crypto.subtle.importKey(
-          "raw",
-          encoder.encode(password),
-          "PBKDF2",
-          false,
-          ["deriveKey"]
-        );
-
-        const key = await crypto.subtle.deriveKey(
-          {
-            name: "PBKDF2",
-            salt: bytesFromBase64(vault.salt),
-            iterations: vault.iterations,
-            hash: "SHA-256"
-          },
-          rawKey,
-          { name: "AES-GCM", length: 256 },
-          false,
-          ["decrypt"]
-        );
-
-        const plain = await crypto.subtle.decrypt(
-          { name: "AES-GCM", iv: bytesFromBase64(vault.iv) },
-          key,
-          bytesFromBase64(vault.data)
-        );
-
-        return Object.freeze(JSON.parse(decoder.decode(plain)));
-      }
-
-      function renderUnlocked(data) {
-        ui.loginLink.href = data.loginUrl;
-        ui.loginLink.textContent = data.loginUrl;
-        ui.downloadLink.href = data.downloadUrl;
-        ui.downloadLink.download = data.downloadName;
-        ui.downloadLink.textContent = `APK 다운로드 (${data.version})`;
-        ui.passwordText.textContent = maskedPassword;
-        ui.revealButton.textContent = "보기";
-        ui.gate.hidden = true;
-        ui.app.hidden = false;
-      }
-
-      async function unlock() {
-        const password = ui.password.value;
-        if (!password) {
-          setMessage("비밀번호를 입력하세요.");
-          ui.password.focus();
-          return;
-        }
-
-        if (!window.crypto || !crypto.subtle) {
-          setMessage("이 브라우저에서는 보안 기능을 사용할 수 없습니다.");
-          return;
-        }
-
-        setBusy(true);
-        setMessage("확인 중입니다.", true);
-
-        try {
-          if (failedAttempts > 0) {
-            await wait(Math.min(10000, failedAttempts * failedAttempts * 700));
-          }
-          const data = await decryptVault(password);
-          protectedData = data;
-          failedAttempts = 0;
-          isRevealed = false;
-          ui.password.value = "";
-          setMessage("");
-          renderUnlocked(data);
-        } catch (error) {
-          failedAttempts += 1;
-          ui.password.value = "";
-          setMessage("비밀번호를 확인해주세요.");
-          ui.password.focus();
-        } finally {
-          setBusy(false);
-        }
-      }
-
-      function lock(message = "") {
-        protectedData = null;
-        isRevealed = false;
-        window.clearTimeout(revealTimer);
-        ui.passwordText.textContent = maskedPassword;
-        ui.loginLink.removeAttribute("href");
-        ui.loginLink.textContent = "";
-        ui.downloadLink.removeAttribute("href");
-        ui.downloadLink.removeAttribute("download");
-        ui.downloadLink.textContent = "APK 다운로드";
-        ui.app.hidden = true;
-        ui.gate.hidden = false;
-        setMessage(message);
-        ui.password.focus();
-      }
-
-      function showToast(text) {
-        ui.toast.textContent = text;
-        ui.toast.classList.add("show");
-        window.clearTimeout(toastTimer);
-        toastTimer = window.setTimeout(() => ui.toast.classList.remove("show"), 1800);
-      }
-
-      function copyWithFallback(text) {
-        const helper = document.createElement("textarea");
-        helper.value = text;
-        helper.setAttribute("readonly", "");
-        helper.style.position = "fixed";
-        helper.style.left = "-9999px";
-        helper.style.top = "0";
-        document.body.appendChild(helper);
-        helper.select();
-        document.execCommand("copy");
-        helper.remove();
-      }
-
-      async function copyPassword() {
-        if (!protectedData) return;
-
-        try {
-          if (navigator.clipboard && window.isSecureContext) {
-            await navigator.clipboard.writeText(protectedData.adminPassword);
-          } else {
-            copyWithFallback(protectedData.adminPassword);
-          }
-          showToast("복사되었습니다.");
-        } catch (error) {
-          showToast("복사할 수 없습니다.");
-        }
-      }
-
-      function toggleReveal() {
-        if (!protectedData) return;
-
-        isRevealed = !isRevealed;
-        ui.passwordText.textContent = isRevealed ? protectedData.adminPassword : maskedPassword;
-        ui.revealButton.textContent = isRevealed ? "숨기기" : "보기";
-        window.clearTimeout(revealTimer);
-
-        if (isRevealed) {
-          revealTimer = window.setTimeout(() => {
-            isRevealed = false;
-            ui.passwordText.textContent = maskedPassword;
-            ui.revealButton.textContent = "보기";
-          }, 12000);
-        }
-      }
-
-      function openLogin() {
-        if (!protectedData) return;
-        window.open(protectedData.loginUrl, "_blank", "noopener,noreferrer");
-      }
-
-      function blockInspectionShortcuts(event) {
-        const key = event.key.toLowerCase();
-        const blocked =
-          key === "f12" ||
-          (event.ctrlKey && key === "u") ||
-          (event.ctrlKey && event.shiftKey && ["i", "j", "c"].includes(key)) ||
-          (event.metaKey && event.altKey && ["i", "j", "c"].includes(key));
-
-        if (blocked) {
-          event.preventDefault();
-          event.stopPropagation();
-          if (protectedData) {
-            lock("잠금 화면에서 다시 진행하세요.");
-          } else {
-            setMessage("잠금 화면에서 다시 진행하세요.", true);
-          }
-          return false;
-        }
-
-        return true;
-      }
-
-      ui.openButton.addEventListener("click", unlock);
-      ui.password.addEventListener("keydown", (event) => {
-        if (event.key === "Enter") unlock();
-      });
-      ui.lockButton.addEventListener("click", () => lock());
-      ui.copyButton.addEventListener("click", copyPassword);
-      ui.revealButton.addEventListener("click", toggleReveal);
-      ui.loginOpenButton.addEventListener("click", openLogin);
-
-      document.addEventListener("contextmenu", (event) => event.preventDefault());
-      document.addEventListener("keydown", blockInspectionShortcuts, true);
-      document.addEventListener("visibilitychange", () => {
-        window.clearTimeout(hiddenLockTimer);
-        if (document.hidden && protectedData) {
-          hiddenLockTimer = window.setTimeout(() => lock(), 90000);
-        }
-      });
-
-      window.addEventListener("pageshow", () => ui.password.focus());
-    })();
+    function copyText(val, label) {
+      navigator.clipboard.writeText(val);
+      const t = document.getElementById('toast');
+      t.textContent = '✅ ' + label + '가 복사되었습니다!';
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2000);
+    }
   </script>
 </body>
 </html>
