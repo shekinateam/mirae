@@ -3,8 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <title>로그인 도우미</title>
+
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
+
     body {
       display: flex;
       align-items: center;
@@ -13,6 +15,7 @@
       background: #f0f2f5;
       font-family: 'Segoe UI', sans-serif;
     }
+
     .box {
       background: #fff;
       border-radius: 12px;
@@ -21,9 +24,11 @@
       text-align: center;
       min-width: 360px;
     }
+
     .label { font-size: 13px; color: #888; margin-bottom: 24px; }
     .row { margin-bottom: 16px; }
     .row-title { font-size: 12px; color: #aaa; margin-bottom: 6px; text-align: left; }
+
     .link {
       display: block;
       font-size: 13px;
@@ -38,7 +43,9 @@
       text-align: left;
       transition: border-color 0.2s, background 0.2s;
     }
+
     .link:hover { border-color: #4a90e2; background: #eaf2ff; }
+
     .copy-wrap {
       display: flex;
       align-items: center;
@@ -47,7 +54,9 @@
       border-radius: 8px;
       overflow: hidden;
     }
+
     .copy-wrap:hover { border-color: #4a90e2; }
+
     .copy-text {
       flex: 1;
       padding: 12px 16px;
@@ -58,6 +67,7 @@
       user-select: all;
       cursor: text;
     }
+
     .copy-btn {
       padding: 12px 16px;
       background: #4a90e2;
@@ -69,7 +79,9 @@
       transition: background 0.2s;
       white-space: nowrap;
     }
+
     .copy-btn:hover { background: #357abd; }
+
     .dl-btn {
       display: block;
       padding: 12px 16px;
@@ -82,7 +94,9 @@
       text-align: center;
       transition: background 0.2s;
     }
+
     .dl-btn:hover { background: #1e8449; }
+
     .toast {
       margin-top: 14px;
       font-size: 13px;
@@ -91,9 +105,11 @@
       transition: opacity 0.3s;
       min-height: 18px;
     }
+
     .toast.show { opacity: 1; }
   </style>
 </head>
+
 <body>
   <div class="box">
     <div class="label">아이디/비밀번호 복사 후 로그인하세요</div>
@@ -109,7 +125,9 @@
       <div class="row-title">👤 아이디</div>
       <div class="copy-wrap">
         <div class="copy-text">display</div>
-        <button class="copy-btn" onclick="copyText('display', '아이디')">📋 복사</button>
+        <button class="copy-btn" onclick="copyText('display', '아이디')">
+          📋 복사
+        </button>
       </div>
     </div>
 
@@ -117,20 +135,30 @@
       <div class="row-title">🔑 비밀번호</div>
       <div class="copy-wrap">
         <div class="copy-text">qwer!@#$</div>
-        <button class="copy-btn" onclick="copyText('qwer!@#$', '비밀번호')">📋 복사</button>
+        <button class="copy-btn" onclick="copyText('qwer!@#$', '비밀번호')">
+          📋 복사
+        </button>
       </div>
     </div>
 
     <div class="row">
       <div class="row-title">🖼️ 이미지 다운로드 (클릭하면 접속)</div>
-      <a class="link" href="https://drive.google.com/drive/mobile/folders/1yNO-C4vLdEh8fln7Z_KcZpeuKVNt87PQ?usp=sharing" target="_blank">
+      <a
+        class="link"
+        href="https://drive.google.com/drive/mobile/folders/1yNO-C4vLdEh8fln7Z_KcZpeuKVNt87PQ?usp=sharing"
+        target="_blank"
+      >
         https://drive.google.com/drive/mobile/folders/1yNO-C4vLdEh8fln7Z_KcZpeuKVNt87PQ?usp=sharing
       </a>
     </div>
 
     <div class="row">
-      <div class="row-title">📱 키오스크 APK 다운로드 (v8.2.0)</div>
-      <a class="dl-btn" href="https://raw.githubusercontent.com/shekinateam/mirae/main/Kiosk_Mode_Final_8.2.0.apk" download="Kiosk_Mode_Final_8.2.0.apk">
+      <div class="row-title">📱 키오스크 APK 다운로드 (v8.3.4)</div>
+      <a
+        class="dl-btn"
+        href="https://raw.githubusercontent.com/shekinateam/mirae/main/Kiosk_Mode_Debug_8.3.4.apk"
+        download="Kiosk_Mode_Debug_8.3.4.apk"
+      >
         ⬇️ APK 다운로드
       </a>
     </div>
@@ -141,10 +169,12 @@
   <script>
     function copyText(val, label) {
       navigator.clipboard.writeText(val);
-      const t = document.getElementById('toast');
-      t.textContent = '✅ ' + label + '가 복사되었습니다!';
-      t.classList.add('show');
-      setTimeout(() => t.classList.remove('show'), 2000);
+
+      const toast = document.getElementById('toast');
+      toast.textContent = '✅ ' + label + '가 복사되었습니다!';
+      toast.classList.add('show');
+
+      setTimeout(() => toast.classList.remove('show'), 2000);
     }
   </script>
 </body>
